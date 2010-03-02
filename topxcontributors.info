@@ -1,0 +1,7 @@
+name = Top X Contributors
+description = "Shows blocks for top X contributors"
+package = "Other"
+core = 6.x
+version = "6.x-1.0"
+core = "6.x"
+dependencies[] = blog

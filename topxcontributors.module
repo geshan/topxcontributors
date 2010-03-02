@@ -1,0 +1,119 @@
+<?php
+// $Id: emailoverrides.module,v 1.00 2010/02/23 13:30:54 geshan Exp $
+//@file emailoverrides.module - module to overried email module
+
+
+/**
+ * implementation of hook_menu
+ * @return unknown_type
+ */
+function topxcontributors_menu() {
+  
+  $items['admin/settings/topxcontributors'] = array(
+    'title' => 'Top X Contributors Settings',
+    'description' => 'Set node types to show block with limit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('topxcontributors_settings_form'),
+    'access arguments'  => array('administer nodes'),
+    'file' => 'topxcontributors.admin.inc',
+    'weight' => 1,
+  );
+  
+  return $items;
+}
+
+/**
+ * implemntation of hook_block
+ * @param unknown_type $op
+ * @param unknown_type $delta
+ * @param unknown_type $edit
+ * @return unknown_type
+ */
+function topxcontributors_block($op = 'list', $delta = 0, $edit = array()) {
+  $nodetypes = variable_get('topxcontributors_nodetypes', 'blog');
+  switch($op) {
+    case 'list':
+        //dsm($nodetypes);
+        foreach($nodetypes as $k => $nodetype) {
+          $blocks[$k]['info'] = t('Top @nodetype Contributors', array('@nodetype' => $nodetype));
+          $blocks[$k]['cache'] = BLOCK_NO_CACHE;
+          
+        }
+        return $blocks;
+      break;
+    case 'view':
+      //switch($delta) {
+      $i = 0;
+      foreach($nodetypes as $k => $nodetype) {
+        if($delta == $k) {
+          $limit = variable_get('topxcontributors_xvalue', 5);
+          //dsm("limit has $limit");
+          $block['subject'] = t('Top @nodetype Contributors', array('@nodetype' => $nodetype));
+          $block['content'] = topxcontiributors_get_block_body($nodetype, $limit);
+        }
+         
+      }
+        
+      //}
+      return $block;  
+      break;
+  }
+  
+}
+
+/**
+ * Function to generate the body of the required block
+ * @param unknown_type $nodetype
+ * @param unknown_type $limit
+ * @return unknown_type
+ */
+function topxcontiributors_get_block_body($nodetype, $limit) {
+  $sql = "SELECT 
+            users.uid, users.name, count(node.nid) AS count 
+          FROM 
+            users INNER JOIN node ON node.uid = users.uid 
+            AND node.status = 1 
+            AND node.type IN ('%s') 
+          GROUP BY 
+            users.uid 
+          ORDER BY 
+            count DESC 
+            , users.name ASC
+          LIMIT 0,%d";
+  
+  $result = db_query($sql, $nodetype, $limit);  
+  if(!$result) {
+    return t('No posts found');
+  }
+  if($result) {
+    $list = array();
+    $i = 0;
+    while($res = db_fetch_array($result)){
+      //$opres[] = $res;
+      if(module_exists('content_profile')) {
+        $account = content_profile_load('general_profile', $res['uid']);
+        if($account->title) {
+          $list[$i] = l($account->title, 'user/'. $account->uid);
+          $list[$i] .= ' ('. $res['count'] .')';  
+        }
+        else {
+          topxcontributors_set_list_with_user_load($list, $res['uid'], $res['count']);
+        }
+      }
+      else {
+        topxcontributors_set_list_with_user_load($list, $res['uid'], $res['count']);
+      }
+            
+      $i++;     
+    }
+    return theme_item_list($list);
+  }
+}
+
+function topxcontributors_set_list_with_user_load(&$list, $uid, $count) {
+  $account = user_load($uid);
+  if($account->name) {
+    $list[$i] = l($account->name, 'user/'. $account->uid);
+    $list[$i] .= ' ('. $count .')';
+  }
+}
