@@ -112,7 +112,7 @@ function topxcontiributors_get_block_body($nodetype, $limit) {
       return theme_item_list($list);  
     }
     else {
-      return t("No posts found");
+      return t('No posts found');
     }
     
   }
