@@ -20,7 +20,7 @@ HOW TO USE
 -----------
 1. Install this module
 2. Go to admin/settings/topxcontributors and choose the node types and the number of contributors to see
-3. Go to http://localhost/drupal6/admin/build/block/list you will see "Top <node-type> Contributors" block 
+3. Go to admin/build/block/list you will see "Top <node-type> Contributors" block 
 as per the node types you selected in step 2, place the block in relevant block regions.
 4. You should see the blocks like below:
 
