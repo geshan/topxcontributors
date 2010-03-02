@@ -83,38 +83,17 @@ function topxcontiributors_get_block_body($nodetype, $limit) {
   
   $result = db_query($sql, $nodetype, $limit);  
   
-  if(db_affected_rows($result) == 0) {
+  if(db_affected_rows() == 0) {
     return t('No posts found');
   }
   if($result) {
     $list = array();
     $i = 0;
     while($res = db_fetch_array($result)){
-      /*
-       //trying to integrate with content_profile
-       if(module_exists('content_profile')) {
-        $account = content_profile_load('general_profile', $res['uid']);
-        if($account->title) {
-          $list[$i] = l($account->title, 'user/'. $account->uid);
-          $list[$i] .= ' ('. $res['count'] .')';  
-        }
-        else {
-          topxcontributors_set_list_with_user_load($list, $res['uid'], $res['count']);
-        }
-      }
-      else {
-        
-      }*/
       topxcontributors_set_list_with_user_load($list, $i, $res['uid'], $res['count']);
       $i++;      
     }
-    if(count($list)) {
-      return theme_item_list($list);  
-    }
-   /* else {
-      return t('No posts found');
-    }
-    */
+    return theme_item_list($list);  
   }
  
 }
