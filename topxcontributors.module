@@ -1,11 +1,11 @@
 <?php
-// $Id: emailoverrides.module,v 1.00 2010/02/23 13:30:54 geshan Exp $
-//@file emailoverrides.module - module to overried email module
+// $Id: topxcontributors.module
+// @file emailoverrides.module - module to overried email module
 
 
 /**
  * implementation of hook_menu
- * @return unknown_type
+ * @return array $items
  */
 function topxcontributors_menu() {
   
@@ -24,10 +24,10 @@ function topxcontributors_menu() {
 
 /**
  * implemntation of hook_block
- * @param unknown_type $op
- * @param unknown_type $delta
- * @param unknown_type $edit
- * @return unknown_type
+ * @param string $op
+ * @param string $delta
+ * @param array $edit
+ * @return string $block or $blocks
  */
 function topxcontributors_block($op = 'list', $delta = 0, $edit = array()) {
   $nodetypes = variable_get('topxcontributors_nodetypes', 'blog');
@@ -42,30 +42,24 @@ function topxcontributors_block($op = 'list', $delta = 0, $edit = array()) {
         return $blocks;
       break;
     case 'view':
-      //switch($delta) {
       $i = 0;
       foreach($nodetypes as $k => $nodetype) {
         if($delta == $k) {
           $limit = variable_get('topxcontributors_xvalue', 5);
-          //dsm("limit has $limit");
           $block['subject'] = t('Top @nodetype Contributors', array('@nodetype' => $nodetype));
           $block['content'] = topxcontiributors_get_block_body($nodetype, $limit);
         }
-         
-      }
-        
-      //}
+      }//foreach nodetyeps close
       return $block;  
       break;
-  }
-  
+  }  
 }
 
 /**
  * Function to generate the body of the required block
- * @param unknown_type $nodetype
- * @param unknown_type $limit
- * @return unknown_type
+ * @param string $nodetype
+ * @param int $limit
+ * @return string
  */
 function topxcontiributors_get_block_body($nodetype, $limit) {
   $sql = "SELECT 
@@ -81,23 +75,30 @@ function topxcontiributors_get_block_body($nodetype, $limit) {
             , users.name ASC
           LIMIT 0,%d";
   
-  $result = db_query($sql, $nodetype, $limit);  
-  
-  if(db_affected_rows() == 0) {
-    return t('No posts found');
-  }
+  $result = db_query($sql, $nodetype, $limit);
   if($result) {
     $list = array();
-    $i = 0;
+    $i = 0; //even acts as counter; as $num_rows in http://drupal.org/node/114774#db-num-rows
     while($res = db_fetch_array($result)){
       topxcontributors_set_list_with_user_load($list, $i, $res['uid'], $res['count']);
       $i++;      
     }
-    return theme_item_list($list);  
-  }
- 
+    if($i != 0) {
+      return theme_item_list($list);    
+    }
+    else {
+      return t('No posts found');
+    }
+  }//$result if close
 }
 
+/**
+ * Function to build the array to show as list with user name and count
+ * @param array $list
+ * @param int $i
+ * @param int $uid
+ * @param int $count
+ */
 function topxcontributors_set_list_with_user_load(&$list, $i, $uid, $count) {
   $account = user_load($uid);
   if($account->name) {
