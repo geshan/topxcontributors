@@ -12,7 +12,7 @@ Not submitted to Drupal, will try for a CVS ;)
 
 DESCRIPTION
 -----------
-The purpose of this module is to expose the top node type posters/contributros as blocks in a list format.
+The purpose of this module is to expose the top node type posters/contributors as blocks in a list format.
 It comes with settings at admin/settings/topxcontributors - set what content/node types will have blocks exposed
 and the numbers of contributors to show for all content types. The module is depened on blog module.
 
