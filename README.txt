@@ -27,3 +27,9 @@ as per the node types you selected in step 2, place the block in relevant block 
 CUSTOMIZING
 -------------
 Output are blocks so you can set the block title as needed.
+
+TUTORIAL ON HOW TO USE
+-------------------------
+I have just posted a blog on how to use this module at: 
+http://geshan.blogspot.com/2010/03/top-x-contributors-drupal-module-to.html - check it.
+If you need further help contact me at: http://www.geshanmanandhar.com/contact
