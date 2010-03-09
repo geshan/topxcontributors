@@ -1,6 +1,6 @@
 <?php
 // $Id: topxcontributors.module
-// @file emailoverrides.module - module to overried email module
+// @file topxcontributors.module - module to show top X contributors of any content type in block HTML list view mode
 
 
 /**
