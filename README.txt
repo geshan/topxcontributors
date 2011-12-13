@@ -8,7 +8,7 @@ Drupal Site: http://www.geshanmanandhar.com
 
 PROJECT PAGE
 ------------
-Not submitted to Drupal, will try for a CVS ;). Did not get it: http://drupal.org/node/735150 - reason- can be done with views, write a views plugin. Convincing reason :). 
+Not submitted to Drupal.
 
 DESCRIPTION
 -----------
