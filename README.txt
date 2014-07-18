@@ -4,7 +4,6 @@ AUTHOR
 ------
 Geshan Manandhar ("geshan", http://drupal.org/user/74608 ) 
 Blog: http://geshan.blogspot.com
-Drupal Site: http://www.geshanmanandhar.com
 
 PROJECT PAGE
 ------------
