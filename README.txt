@@ -31,4 +31,3 @@ TUTORIAL ON HOW TO USE
 -------------------------
 I have just posted a blog on how to use this module at: 
 http://geshan.blogspot.com/2010/03/top-x-contributors-drupal-module-to.html - check it.
-If you need further help contact me at: http://www.geshanmanandhar.com/contact
